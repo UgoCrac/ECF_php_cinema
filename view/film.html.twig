@@ -1,0 +1,69 @@
+<div class="container-fluid p-0 mb-5 mt-5">
+	<div id="header-carousel" class="carousel slide">
+		<div class="carousel-inner">
+			{% if search is not empty %}
+			<p>Vous avez recherché : "{{ search }}"
+				<br>Résultat de la recherche : {{ total_films }} {{ total_films == 1 ? 'film trouvé' : 'films trouvés'
+				}} !
+			</p>
+			{% endif %}
+			{% for film in films %}
+			<div class="carousel-item {{ loop.first ? 'active' : '' }}">
+				<div class="d-flex w-100 align-items-center justify-content-center">
+					<div class="d-flex align-items-start justify-content-space-beetween">
+						<div class="me-5 w-100 mt-5">
+							<h1 class="text-black mb-3 animated slideInDown">{{film.getId}}
+								-
+								{{ film.getTitle }}{{message2}}</h1>
+							<p class="text-black class= mb-3 animated slideInDown">Réalisé en
+								<b>
+									<i>{{film.getAnnee}}</b>
+								</i>
+								par
+								<b>{{film.getRealisateur}}</b>
+							</p>
+							<p class="text-black class= mb-3 animated slideInDown">
+								{% for role in film.getRoles %}
+								Avec
+								<u>
+									<i>
+										{{ role.getActeur.getPrenom }}
+										{{ role.getActeur.getNom }}</i>
+								</u>
+								dans le rôle de
+								<b>
+									{{ role.getPersonnage }}</b>
+								{% if not loop.last %}<br>
+								{% endif %}
+								{% endfor %}
+							</p>
+							{% if session.user is defined %}
+							<a href="film&{{ film.getId }}">
+								<button class="btn-danger rounded">Supprimer</button>
+							</a>
+							{% endif %}
+						</div>
+						<img class="w-50 rounded affiche" src="{{ film.getAffiche() }}" alt="Image">
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<div class="d-flex justify-content-center mt-3">
+			<button class="btn btn-secondary m-3 btnCarroussel" type="button" data-bs-target="#header-carousel"
+				data-bs-slide="prev">Précédent</button>
+			<button class="btn btn-secondary btnCarroussel m-3" type="button" data-bs-target="#header-carousel"
+				data-bs-slide="next">Suivant</button>
+		</div>
+	</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+	// Désactiver le défilement automatique du carrousel
+	$(document).ready(function () {
+		$('#header-carousel').carousel({
+			interval: false
+		});
+	});
+</script>
